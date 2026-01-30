@@ -1,0 +1,40 @@
+import express from "express"
+import colors from "colors"
+import connectDB from "./config/dbConfig.js"
+
+const PORT = process.env.PORT || 8000
+const app = express()
+
+// local Imports
+import authRoutes from "./routes/authRoutes.js"
+import adminRoutes from "./routes/adminRoutes.js"
+import freelancerRoutes from "./routes/freelancerRoutes.js"
+import projectRoutes from "./routes/projectRoutes.js"
+import errorHandler from "./middleware/errorHandler.js"
+
+// DB CONNECTION
+connectDB()
+
+// Body-Parser
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+app.get("/", (req, res) => {
+  res.json({
+    message: "WELCOME TO KAAM KARO API 1.0"
+  })
+})
+
+// Routes
+app.use("/api/auth", authRoutes)
+app.use("/api/admin", adminRoutes)
+app.use("/api/freelancer", freelancerRoutes)
+app.use("/api/project", projectRoutes)
+
+
+// Error Handler
+app.use(errorHandler)
+
+app.listen(PORT, () => {
+  console.log(`SERVER IS RUNNING AT PORT : ${PORT}`.bgBlue.black)
+})
